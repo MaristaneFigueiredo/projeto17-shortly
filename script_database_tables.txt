@@ -21,3 +21,7 @@ psql -h dpg-cee73cla4997f3l9hn10-a.oregon-postgres.render.com -p 5432 -U root -d
 2) Pegar o arquivo dump
     D:\Arquivos Locais\Peo\Treinamento\Driven\modulo4\projeto 17\projeto17-shortly    
 
+
+
+testar o banco externo
+psql -h dpg-cee73cla4997f3l9hn10-a.oregon-postgres.render.com -U root shortlyapi_ds9q
