@@ -1,5 +1,23 @@
 CREATE DATABASE shortly
 
-CREATE TABLE users ( id SERIAL PRIMARY KEY, name TEXT NOT NULL, password TEXT NOT NULL, email TEXT NOT NULL)
+CREATE TABLE users ( id SERIAL PRIMARY KEY, name TEXT NOT NULL, password TEXT NOT NULL, email TEXT NOT NULL, createdAt DATE NOT NULL DEFAULT NOW())
 
-CREATE TABLE links (id SERTIAL PRIMARY KEY, userId NOT NULL, url TEXT NOT NULL, visitCount INTEGER NOT NULL)
+CREATE TABLE links (id SERIAL PRIMARY KEY, userId INTEGER NOT NULL, url TEXT NOT NULL, visitCount INTEGER NOT NULL DEFAULT 0, createdAt DATE NOT NULL DEFAULT NOW(), CONSTRAINT fk_iduser FOREIGN KEY(userId) references users(id))
+
+Dump
+1 passo) entrar neste caminho
+    C:\Program Files\PostgreSQL\15\bin
+2 passo) digite o comando abaixo   
+    pg_dump -h localhost -p 5432 -U postgres -F p -b -v -f "C:\dump.sql" shortlyapi
+
+
+Restaurar nas nuvens
+1) restore do dump feito atraves do prompt do windows
+// prompt do postgres + caminho nas nuvens + porta + usuário + nome do banco + o caminho do arquivo na máquina local
+
+psql -h dpg-cee73cla4997f3l9hn10-a.oregon-postgres.render.com -p 5432 -U root -d shortlyapi_ds9q < "D:\Arquivos Locais\Peo\Treinamento\Driven\modulo4\projeto 17\projeto17-shortly\dump.sql"
+
+
+2) Pegar o arquivo dump
+    D:\Arquivos Locais\Peo\Treinamento\Driven\modulo4\projeto 17\projeto17-shortly    
+
