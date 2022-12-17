@@ -33,3 +33,57 @@ CREATE TABLE orders (
     "productId" INTEGER NOT NULL REFERENCES "products"("id"),
     "clientId" INTEGER NOT NULL REFERENCES "clients"("id"),
 )
+
+
+/ * Conectar a api ao banco de dados postgres no render
+
+                OBSERVAÇÃO = NÃO ESQUECER DE IMPORTAR O DOTENV para configuração do banco -db.js
+1)sintaxe de como deve ser a DATABASE_URL
+
+    DATABASE_URL=`postgres://${USERDB}:${PASSWORD}@${HOSTNAME}/${DATABASE}`
+    
+    DATABASE_URL=postgres://root:PhYKLxesNU1YRD297cNQXUddQPshYsj1@dpg-cee73cla4997f3l9hn10-a/shortlyapi_ds9q
+
+2) Colocar o protocolo de segurança SSL como true. obs.: O protocolo "SSL" assegura que os dados transferidos entre um cliente e um servidor permaneçam privados
+
+    const connectionDB = new Pool({
+        connectionString: process.env.DATABASE_URL,
+        ssl: true,  
+     });
+*/
+
+/ * Conectar a api ao banco de dados postgres local
+Para isso preciso atribuir cinco atributos
+host: "localhost"
+port: 5432
+user: "postgres"
+password:"Banco2404@"
+database:"shortly"
+
+//banco local - já atribuindo diretamente no arquivo de configuração do banco - db.js
+
+     const connectionDB = new Pool({
+       host: "localhost",
+       port: 5432,
+       user: "postgres",
+       password: "Banco2404@",
+       database: "shortly",
+    });
+
+//banco local
+    //variaveis de ambiente no arquivo .env
+        HOST = localhost
+        PORTDB = 5432
+        USERDB = postgres
+        PASSWORD = Banco2404@
+        DATABASE = shortly
+ 
+    //arquivo de configuração do banco - db.js
+         const connectionDB = new Pool({
+         host: process.env.HOST,
+         port: process.env.PORTDB,
+         user: process.env.USERDB,
+         password: process.env.PASSWORD,
+         database: process.env.DATABASE,
+     });
+
