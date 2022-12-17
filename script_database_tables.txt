@@ -25,3 +25,11 @@ psql -h dpg-cee73cla4997f3l9hn10-a.oregon-postgres.render.com -p 5432 -U root -d
 
 testar o banco externo
 psql -h dpg-cee73cla4997f3l9hn10-a.oregon-postgres.render.com -U root shortlyapi_ds9q
+
+
+Ex. de uma TABLE
+CREATE TABLE orders (
+    id SERIAL PRIMARY KEY,
+    "productId" INTEGER NOT NULL REFERENCES "products"("id"),
+    "clientId" INTEGER NOT NULL REFERENCES "clients"("id"),
+)
