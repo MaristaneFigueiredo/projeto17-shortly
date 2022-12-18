@@ -15,6 +15,7 @@ Restaurar nas nuvens
 1) restore do dump feito atraves do prompt do windows
 // prompt do postgres + caminho nas nuvens + porta + usuário + nome do banco + o caminho do arquivo na máquina local
 
+
 psql -h dpg-cee73cla4997f3l9hn10-a.oregon-postgres.render.com -p 5432 -U root -d shortlyapi_ds9q < "D:\Arquivos Locais\Peo\Treinamento\Driven\modulo4\projeto 17\projeto17-shortly\dump.sql"
 
 
@@ -24,6 +25,7 @@ psql -h dpg-cee73cla4997f3l9hn10-a.oregon-postgres.render.com -p 5432 -U root -d
 
 
 testar o banco externo
+sintaxe: psql - h dominio -U usuario
 psql -h dpg-cee73cla4997f3l9hn10-a.oregon-postgres.render.com -U root shortlyapi_ds9q
 
 

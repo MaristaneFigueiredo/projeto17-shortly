@@ -1,9 +1,13 @@
 import { Router } from "express";
 import { postSignUp, postSignIn } from "../controllers/authController.js";
-import {userModelValidation} from "../middlewares/authValidationMiddleware.js"
+import {
+  //userModelValidation,
+  signUpValidation,
+  signInValidation,
+} from "../middlewares/authValidationMiddleware.js";
 
 const authRouter = Router();
-authRouter.post("/signup",userModelValidation, postSignUp);
-authRouter.post("/signin", postSignIn);
+authRouter.post("/signup", signUpValidation, postSignUp);
+authRouter.post("/signin", signInValidation, postSignIn);
 
 export default authRouter;
