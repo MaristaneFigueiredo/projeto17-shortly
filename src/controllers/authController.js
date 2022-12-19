@@ -1,6 +1,8 @@
 import bcrypt from "bcrypt"; //bcrypt - biblioteca do javascript para encriptar qualquer tipo de dado
 import  jwt  from "jsonwebtoken";
-import {v4 as uuidV4} from "uuid" // versão 4 é que gera string
+//import {v4 as uuidV4} from "uuid" // versão 4 é que gera string
+
+import { secret } from "../config/config.js";
 
 import connectionDB from "../database/db.js";
 
@@ -28,13 +30,21 @@ export async function postSignUp(req, res) {
 
 export function postSignIn(req, res) {
   const user = res.locals.user;
+ 
+  const dateUser = {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+  }
 
   //const token = uuidV4()
   
-  const SECRET = uuidV4() // senha utilizada p assinatura digital
-  
-  //const token = jwt.sign({userId: user.id}, SECRET, {expiresIn: 60 * 60 * 2} ) // 2 horas p expiração
-  const token = jwt.sign({userId: user.id}, SECRET, {expiresIn: 300} ) // 5 minutos p expiração
+  // const secret = uuidV4() // senha utilizada p assinatura digital
+  // console.log('secret', secret)  
+  //const token = jwt.sign({userId: user.id}, secret, {expiresIn: 60 * 60 * 2} ) // 2 horas p expiração
+
+
+  const token = jwt.sign(dateUser, secret, {expiresIn: 300} ) // 5 minutos p expiração
   res.status(200).send(token)  
 
 }

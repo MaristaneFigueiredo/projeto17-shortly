@@ -32,7 +32,8 @@ CREATE TABLE public.links (
     userid integer NOT NULL,
     url text NOT NULL,
     visitcount integer DEFAULT 0 NOT NULL,
-    createdat date DEFAULT now() NOT NULL
+    createdat date DEFAULT now() NOT NULL,
+    shortUrl text NOT NULL,
 );
 
 

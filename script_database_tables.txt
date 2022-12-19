@@ -2,7 +2,7 @@ CREATE DATABASE shortly
 
 CREATE TABLE users ( id SERIAL PRIMARY KEY, name TEXT NOT NULL, password TEXT NOT NULL, email TEXT NOT NULL, createdAt DATE NOT NULL DEFAULT NOW())
 
-CREATE TABLE links (id SERIAL PRIMARY KEY, userId INTEGER NOT NULL, url TEXT NOT NULL, visitCount INTEGER NOT NULL DEFAULT 0, createdAt DATE NOT NULL DEFAULT NOW(), CONSTRAINT fk_iduser FOREIGN KEY(userId) references users(id))
+CREATE TABLE links (id SERIAL PRIMARY KEY, userId INTEGER NOT NULL, url TEXT NOT NULL, visitCount INTEGER NOT NULL DEFAULT 0, createdAt DATE NOT NULL DEFAULT NOW(), shortUrl TEXT NOT NULL, CONSTRAINT fk_iduser FOREIGN KEY(userId) references users(id))
 
 Dump
 1 passo) entrar neste caminho
