@@ -32,7 +32,7 @@ export async function signInValidation(req, res, next) {
 
   const { error } = authModel.validate(data, { abortEarly: false }); // abortEarly:false = se existir mais de um erro traz todos
 
-  if (error) {
+  if (error) { 
     const errors = error.details.map((d) => d.message);
     return res.status(422).send(errors);
     //422: Unprocessable Entity => Significa que a requisição enviada não está no formato esperado
@@ -41,8 +41,8 @@ export async function signInValidation(req, res, next) {
 
   try {
     const userExists = await validateUserExists(email);   
-   
-    if ((userExists.length === 0)) {    
+    
+    if ((userExists.length === 0)) {       
       return res
         .status(401)
         .send({ message: "Este email não está cadastrado!" });
@@ -52,15 +52,17 @@ export async function signInValidation(req, res, next) {
     const passwordRegistered =  userExists[0].password  
     const passwordOk = bcrypt.compareSync(password, passwordRegistered) // dois parâmetros: O dado que qro validar / dado encriptado
   
-    if(!passwordOk){
-      return res.sendStatus(401).send({ message: "Usuário não autorizado!" });
+
+    if(!passwordOk){      
+      return res.status(401).send({ message: "Usuário não autorizado!" });
     } 
     
     res.locals.user = userExists;
     
-    
+  
 
   } catch (error) {
+    console.log('entrei no erro 500')
     console.log(error);
     return res.status(500).send({ message: "Erro inesperado no servidor!" });
   }

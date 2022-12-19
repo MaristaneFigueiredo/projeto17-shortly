@@ -2,10 +2,13 @@ import connectionDB from "../database/db.js";
 import { nanoid } from "nanoid";
 
 export async function postShorten(req, res) {
-  const { userId } = res.locals.user;
+  
   const { url } = req.body;
   const shortUrl = nanoid(8);
-  console.log('shortUrl',shortUrl)
+ 
+  //console.log('res.locals.user', res.locals.user)
+  const userId = res.locals.user.id
+
 
   try {
     await connectionDB.query(

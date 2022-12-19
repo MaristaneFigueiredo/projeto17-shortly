@@ -1,41 +1,66 @@
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 import { secret } from "../config/config.js";
 //import dotenv from 'dotenv'
 
 // export default async function tokenValidation(req, res, next) {
-export default function tokenValidation(req, res, next) {  
-  console.log('tokenValidation - estou aqui')   
-  
-  const { authorization } = req.headers;
-  
-    const token = authorization?.replace("Bearer ", "");
-  
+export default function tokenValidation(req, res, next) {
 
-    console.log('tokenValidation - entrei aqui', token)  
-    if (!token) {
+  const { authorization } = req.headers;
+
+  const token = authorization?.replace("Bearer ", "");
+
+  if (!token) {
       return res.status(401).send({ message: "Usuário não autorizado!" });
-    }
+  }
 
     
-    // jwt.verify(token, a chave secreta da minha aplicacao , funçao callback, onde é o posso ter o erro, ou o token decodificado   
-    const user = jwt.verify(token, secret, (erro ) => {
-      if(erro)
-         // return false
-         return res.status(401).send({ message: "Usuário não autorizado!" })
+  const user = jwt.verify(token, secret, (erro ) => {
+  if(erro)
+      return res.status(401).send({ message: "Usuário não autorizado!" })
+  else
+     return jwt.decode(token)
 
-      else return jwt.decode(token)
-      // teste = decoded.dateUser
-      //console.log('teste', teste)
   })
 
-    console.log('user', user)
-    // if (!user) {
-    //   return res.status(401).send({ message: "Usuário não autorizado!" });
-    // }
-  
-  
-    
-     res.locals.user = user;
-  
+  // const decodedToken = jwt.decode(token, {complete:true})
+  // console.log('decodedToken', decodedToken)
+
+    console.log('user ', user)
+  // if (!user) {
+  //   return res.status(401).send({ message: "Usuário não autorizado!" });
+  // }
+
+  res.locals.user = user;
+
     next();
-  }
+}
+
+
+// jwt.verify(token, a chave secreta da minha aplicacao , funçao callback, onde é o posso ter o erro, ou o token decodificado
+
+// export default function tokenValidation(req, res, next) {
+//   try {
+//     const { authorization } = req.headers;
+
+//     const token = authorization?.replace("Bearer ", "");
+//     let teste;
+
+//     const user = jwt.verify(token, secret, (erro) => {
+//       if (erro) return false;
+//       else return jwt.decode(token);
+    
+//     });
+
+//     if (!user) return res.status(401).send("Token inválido");   
+    
+    
+
+//     res.locals.user = user;
+//     console.log("retornarBearerToken -res.locals.user", res.locals.user);
+
+//     next();
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send("Erro interno no servidor!");
+//   }
+// }

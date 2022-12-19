@@ -3,7 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import authRouter from "./routes/authRouter.js";
 import logoutRouter from "./routes/authRouter.js";
-import shortenersRouter from "./routes/authRouter.js";
+import shortenersRouter from "./routes/shortenersRouter.js"; //o import está errado
 
 dotenv.config();
 

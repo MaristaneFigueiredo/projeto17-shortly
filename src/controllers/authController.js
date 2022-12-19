@@ -32,19 +32,17 @@ export function postSignIn(req, res) {
   const user = res.locals.user;
  
   const dateUser = {
-    id: user.id,
-    name: user.name,
-    email: user.email,
+    id: user[0].id,
+    name: user[0].name,
+    email: user[0].email,
   }
 
   //const token = uuidV4()
-  
-  // const secret = uuidV4() // senha utilizada p assinatura digital
-  // console.log('secret', secret)  
   //const token = jwt.sign({userId: user.id}, secret, {expiresIn: 60 * 60 * 2} ) // 2 horas p expiração
 
 
   const token = jwt.sign(dateUser, secret, {expiresIn: 300} ) // 5 minutos p expiração
+  
   res.status(200).send(token)  
 
 }
