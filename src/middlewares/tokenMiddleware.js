@@ -2,11 +2,16 @@ import jwt from "jsonwebtoken"
 import { secret } from "../config/config.js";
 //import dotenv from 'dotenv'
 
-export default async function tokenValidation(req, res, next) {
-    const { authorization } = req.headers;
+// export default async function tokenValidation(req, res, next) {
+export default function tokenValidation(req, res, next) {  
+  console.log('tokenValidation - estou aqui')   
+  
+  const { authorization } = req.headers;
   
     const token = authorization?.replace("Bearer ", "");
   
+
+    console.log('tokenValidation - entrei aqui', token)  
     if (!token) {
       return res.status(401).send({ message: "Usuário não autorizado!" });
     }

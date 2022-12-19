@@ -4,7 +4,6 @@ import dotenv from "dotenv";
 import authRouter from "./routes/authRouter.js";
 import logoutRouter from "./routes/authRouter.js";
 import shortenersRouter from "./routes/authRouter.js";
-import usersRouter from "./routes/authRouter.js";
 
 dotenv.config();
 
@@ -17,7 +16,6 @@ app.use(cors());
 app.use(authRouter);
 app.use(logoutRouter);
 app.use(shortenersRouter);
-app.use(usersRouter);
 
 
 const port = process.env.PORT;
