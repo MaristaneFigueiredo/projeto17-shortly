@@ -26,8 +26,6 @@ export async function postSignUp(req, res) {
 }
 
 
-
-
 export function postSignIn(req, res) {
   const user = res.locals.user;
  
@@ -46,7 +44,6 @@ export function postSignIn(req, res) {
   res.status(200).send(token)  
 
 }
-
 
 
 export async function validateUserExists(email) {

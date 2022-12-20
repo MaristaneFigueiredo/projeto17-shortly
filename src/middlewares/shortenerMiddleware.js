@@ -2,7 +2,7 @@ import shortenerModel from "../models/shortenerModel.js";
 
 
 
-export default function shortenersMiddleware(req, res, next)
+export default function shortenerMiddleware(req, res, next)
 {
     
     const url = req.body;
@@ -17,14 +17,8 @@ export default function shortenersMiddleware(req, res, next)
           const errors = error.details.map((d) => d.message);
           return res.status(422).send(errors);
           //422: Unprocessable Entity => Significa que a requisição enviada não está no formato esperado
-        }
-
-        
-        // const { body } = req
-        // const { error } = shortenerModel.validate(body)
-
-        //     if(error)
-        //         return res.status(422).send({ message: error.details.map(e => e.message)})
+        }       
+       
             
         next()
         
