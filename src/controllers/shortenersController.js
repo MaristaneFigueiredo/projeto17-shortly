@@ -46,20 +46,27 @@ export async function getUrlId(req, res) {
 }
 
 export async function getShortUrl(req, res) {
-  //   const { name, password, email } = res.locals.user;
-  //   const passwordHash = bcrypt.hashSync(password, 10);
-  //   try {
-  //     await connectionDB.query(
-  //       `
-  //             INSERT INTO users ( name, password, email) VALUES($1, $2, $3)
-  //             `,
-  //       [name, passwordHash, email]
-  //     );
-  //     res.sendStatus(201);
-  //   } catch (error) {
-  //     console.log(error);
-  //     return res.status(500).send({ message: "Erro inesperado no servidor!" });
-  //   }
+  const {shortUrl} = req.params
+  //console.log('id', id)
+  try {
+    const {rows} = await connectionDB.query(
+      `
+        SELECT * FROM links WHERE "shortUrl" = $1
+      `,
+      [shortUrl]
+    );
+
+
+    if (rows.length === 0) 
+     return res.status(404).send({ message: "url encurtada não existe!" })
+    
+    const url = rows.pop()
+
+    res.redirect(`http://${url.url}`)
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({ message: "Erro inesperado no servidor!" });
+  }
 }
 
     

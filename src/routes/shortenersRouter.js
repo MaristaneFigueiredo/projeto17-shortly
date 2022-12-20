@@ -12,6 +12,7 @@ const shortenersRouter = Router()
 shortenersRouter.post("/urls/shorten", shortenerMiddleware, tokenValidation, postShorten);        
     
 shortenersRouter.get("/urls/:id", getUrlId);
-// shortenersRouter.get("/urls/open/:shortUrl",  getShortUrl);
+
+shortenersRouter.get("/urls/open/:shortUrl",  getShortUrl);
 
 export default shortenersRouter;
