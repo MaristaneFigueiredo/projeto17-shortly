@@ -18,7 +18,7 @@ export async function postShorten(req, res) {
       [userId, url, shortUrl]
     );
 
-    res.sendStatus(201).send({"shortUrl": shortUrl});
+    res.status(201).send({"shortUrl": shortUrl});
   } catch (error) {
     console.log(error);
     return res.status(500).send({ message: "Erro inesperado no servidor!" });

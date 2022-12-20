@@ -3,11 +3,13 @@ import { Router } from "express";
 import { postShorten, getUrlId, getShortUrl } from "../controllers/shortenersController.js";
 
 import tokenValidation from "../middlewares/tokenMiddleware.js"
+import shortenersMiddleware from "../middlewares/shortenersMiddleware.js";
+  
   
 
 const shortenersRouter = Router()
 
-shortenersRouter.post("/urls/shorten", tokenValidation, postShorten);        
+shortenersRouter.post("/urls/shorten", shortenersMiddleware, tokenValidation, postShorten);        
 //shortenersRouter.post("/urls/shorten", postShorten);        
 // shortenersRouter.get(" /urls/:id",  getUrlId);
 // shortenersRouter.get("/urls/open/:shortUrl",  getShortUrl);

@@ -22,17 +22,32 @@ export default function tokenValidation(req, res, next) {
 
   })
 
+  // const user = jwt.verify(token, secret, (erro ) => {
+  //   if(erro){
+  //     console.log('entrei aqui dentro VERIFY')
+  //       return res.status(401).send({ message: "Usuário não autorizado!" })
+  //   }
+  //   else
+       
+  //      return jwt.decode(token)
+  
+  //   })
+  
+
   // const decodedToken = jwt.decode(token, {complete:true})
   // console.log('decodedToken', decodedToken)
 
-    console.log('user ', user)
+  
   // if (!user) {
+  //  // console.log('entrei aqui dentro !user', !user)
   //   return res.status(401).send({ message: "Usuário não autorizado!" });
   // }
 
-  res.locals.user = user;
+   res.locals.user = user;
 
-    next();
+  
+  //console.log('continuo aqui')
+  next();
 }
 
 
