@@ -7,11 +7,21 @@ export async function postShorten(req, res) {
   const userId = res.locals.user.id;
 
   try {
+    const urlUpdate =
+      "http://www." +
+      url
+        .replace("http://", "")
+        .replace("https://", "")
+        .replace("http://www.", "")
+        .replace("https://www.", "")
+        .replace("www.", "")
+        .toLowerCase();
+
     await connectionDB.query(
       `
             INSERT INTO links ( userid, url, "shortUrl") VALUES($1, $2, $3)
             `,
-      [userId, url, shortUrl]
+      [userId, urlUpdate, shortUrl]
     );
 
     res.status(201).send({ shortUrl: shortUrl });
@@ -43,31 +53,42 @@ export async function getUrlId(req, res) {
 
 export async function getShortUrl(req, res) {
   const { shortUrl } = req.params;
-  //console.log('id', id)
+
   try {
     const { rows } = await connectionDB.query(
       `
-        SELECT * FROM links WHERE "shortUrl" = $1
+       SELECT id, url, visitcount FROM links WHERE "shortUrl" = $1
       `,
       [shortUrl]
     );
 
-    const url = rows.pop();
-
-    if (rows.length === 0)
+    if (rows.length === 0) {
       return res.status(404).send({ message: "url encurtada não existe!" });
+    }
 
-    await connectionDB.query(
-      `
-      UPDATE links SET visitcount = visitcount + 1 WHERE id = $1
-      `,
-      [url.id]
-    );
-
-    res.redirect(`http://${url.url}`);
+    addVisit(rows[0].id, rows[0].visitcount);
+    const uri = rows[0].url;
+    //res.redirect(`http://${uri}`);
+    res.redirect(uri);
   } catch (error) {
     console.log(error);
     return res.status(500).send({ message: "Erro inesperado no servidor!" });
+  }
+
+  async function addVisit(id, visitcount) {
+    try {
+      let visitPage = visitcount + 1;
+
+      const { rows } = await connectionDB.query(
+        `
+       UPDATE links SET visitcount =${visitPage} WHERE id = $1
+      `,
+        [id]
+      );
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send({ message: "Erro inesperado no servidor!" });
+    }
   }
 }
 
