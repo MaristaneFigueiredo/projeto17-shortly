@@ -99,9 +99,9 @@ export async function deleteUrl(req, res) {
   try {
     const url = await getUrlById(id);
 
-    if (!url) return res.sendStatus(404);
+    if (!url) return res.status(404).send("URL não existe!");
 
-    if (url.iduser !== userId)
+    if (url.userid !== userId)
       return res.status(401).send("URL não pertence a este usuário!");
 
     await connectionDB.query(
@@ -118,8 +118,6 @@ export async function deleteUrl(req, res) {
 }
 
 export async function getUrlById(id) {
-  const queryText = "SELECT * FROM links WHERE id = $1";
-
   const { rows } = await connectionDB.query(
     `
       SELECT * FROM links WHERE id = $1
@@ -127,5 +125,38 @@ export async function getUrlById(id) {
     [id]
   );
 
+  //console.log("rows.pop()", rows.pop());
+
   return rows.pop();
+}
+
+export async function getUserMe(req, res) {
+  const user = res.locals.user;
+  //console.log("user", user);
+
+  try {
+    const { rows } = await connectionDB.query(
+      `
+      SELECT id, "shortUrl", url, visitcount FROM links WHERE userid = $1
+      `,
+      [user.id]
+    );
+    const visitCountUrls = rows.map((e) => e.visitcount);
+    const visitCount = visitCountUrls.reduce(
+      (acumulador, elemento) => acumulador + elemento,
+      0
+    );
+
+    const retorno = {
+      id: user.id,
+      name: user.name,
+      visitCount,
+      shortenedUrls: rows,
+    };
+
+    return res.status(200).send(retorno);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send({ message: "Erro inesperado no servidor!" });
+  }
 }
