@@ -22,8 +22,7 @@ export async function postShorten(req, res) {
 }
 
 export async function getUrlId(req, res) {
- 
-  const {id} = req.params
+  const { id } = req.params;
   //console.log('id', id)
   try {
     const link = await connectionDB.query(
@@ -33,12 +32,9 @@ export async function getUrlId(req, res) {
       [id]
     );
 
-
     if (link.rows.length === 0) {
-      res.status(404).send({ message: "url encurtada não existe!" })
-    } else
-
-    res.status(200).send(link.rows[0]);
+      res.status(404).send({ message: "url encurtada não existe!" });
+    } else res.status(200).send(link.rows[0]);
   } catch (error) {
     console.log(error);
     return res.status(500).send({ message: "Erro inesperado no servidor!" });
@@ -46,52 +42,69 @@ export async function getUrlId(req, res) {
 }
 
 export async function getShortUrl(req, res) {
-  const {shortUrl} = req.params
+  const { shortUrl } = req.params;
   //console.log('id', id)
   try {
-    const {rows} = await connectionDB.query(
+    const { rows } = await connectionDB.query(
       `
         SELECT * FROM links WHERE "shortUrl" = $1
       `,
       [shortUrl]
     );
 
+    const url = rows.pop();
 
-    if (rows.length === 0) 
-     return res.status(404).send({ message: "url encurtada não existe!" })
-    
-    const url = rows.pop()
+    if (rows.length === 0)
+      return res.status(404).send({ message: "url encurtada não existe!" });
 
-    res.redirect(`http://${url.url}`)
+    await connectionDB.query(
+      `
+      UPDATE links SET visitcount = visitcount + 1 WHERE id = $1
+      `,
+      [url.id]
+    );
+
+    res.redirect(`http://${url.url}`);
   } catch (error) {
     console.log(error);
     return res.status(500).send({ message: "Erro inesperado no servidor!" });
   }
 }
 
-    
-  
+export async function deleteUrl(req, res) {
+  const { id } = req.params;
+  const userId = res.locals.user.id;
 
-// export async function validateUrlShortenerExists() {
-//   try {
-    
-//     const urlShortExists = await connectionDB.query(
-//       `
-//             SELECT * FROM links WHERE email = $1
-//         `,
-//       [urlShort]
-//     );
+  try {
+    const url = await getUrlById(id);
 
+    if (!url) return res.sendStatus(404);
 
-//     if ((urlShortExists.rows.length === 0)) {       
-//       return res
-//         .status(404)
-//         .send({ message: "Esta url encurtada não existe!" });
-//     }
+    if (url.iduser !== userId)
+      return res.status(401).send("URL não pertence a este usuário!");
 
-    
-//   } catch (error) {
-//     console.log(error);
-//     return res.status(500).send({ message: "Erro inesperado no servidor!" });
-//   }
-// }
+    await connectionDB.query(
+      `
+          DELETE FROM links WHERE id = $1
+          `,
+      [id]
+    );
+    return res.sendStatus(204);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send({ message: "Erro inesperado no servidor!" });
+  }
+}
+
+export async function getUrlById(id) {
+  const queryText = "SELECT * FROM links WHERE id = $1";
+
+  const { rows } = await connectionDB.query(
+    `
+      SELECT * FROM links WHERE id = $1
+      `,
+    [id]
+  );
+
+  return rows.pop();
+}
