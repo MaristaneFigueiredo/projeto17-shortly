@@ -160,3 +160,22 @@ export async function getUserMe(req, res) {
     return res.status(500).send({ message: "Erro inesperado no servidor!" });
   }
 }
+
+export async function getRanking(req, res) {
+  try {
+    const { rows } = await connectionDB.query(
+      `
+          SELECT l.userid AS id, u.name AS name, COUNT(l.id) as linkscount, SUM(l.visitcount) as visitcount 
+                        FROM links l
+                        JOIN users u ON l.userid = u.id 
+                        GROUP BY l.userid, name 
+                        ORDER BY visitcount DESC 
+                        LIMIT 10          
+          `
+    );
+    return res.status(200).send(rows);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send({ message: "Erro inesperado no servidor!" });
+  }
+}

@@ -6,6 +6,7 @@ import {
   getShortUrl,
   deleteUrl,
   getUserMe,
+  getRanking,
 } from "../controllers/shortenersController.js";
 
 import tokenValidation from "../middlewares/tokenMiddleware.js";
@@ -27,5 +28,7 @@ shortenersRouter.get("/urls/open/:shortUrl", getShortUrl);
 shortenersRouter.delete("/urls/:id", tokenValidation, deleteUrl);
 
 shortenersRouter.get("/users/me", tokenValidation, getUserMe);
+
+shortenersRouter.get("/ranking", getRanking);
 
 export default shortenersRouter;
