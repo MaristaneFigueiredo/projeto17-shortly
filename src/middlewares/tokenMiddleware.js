@@ -1,8 +1,9 @@
 import jwt from "jsonwebtoken";
 import { secret } from "../config/config.js";
+import { returnUserById } from "../controllers/authController.js";
 //import dotenv from 'dotenv'
 
-export default function tokenValidation(req, res, next) {
+export default async function tokenValidation(req, res, next) {
   try {
     const { authorization } = req.headers;
 
@@ -16,8 +17,14 @@ export default function tokenValidation(req, res, next) {
       else return jwt.decode(token);
     });
 
+    //console.log("user.id teste", user.id);
     if (!user) {
       return res.status(401).send({ message: "Usuário não autorizado!" });
+    } else {
+      const userExists = (await returnUserById(user.id)) ? true : false;
+
+      if (userExists === false)
+        return response.status(404).send("Usuário não existe!");
     }
 
     res.locals.user = user;

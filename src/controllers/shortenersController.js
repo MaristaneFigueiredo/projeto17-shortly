@@ -165,13 +165,14 @@ export async function getRanking(req, res) {
   try {
     const { rows } = await connectionDB.query(
       `
-          SELECT l.userid AS id, u.name AS name, COUNT(l.id) as linkscount, SUM(l.visitcount) as visitcount 
-                        FROM links l
-                        JOIN users u ON l.userid = u.id 
-                        GROUP BY l.userid, name 
-                        ORDER BY visitcount DESC 
-                        LIMIT 10          
-          `
+      SELECT u.id AS id, u.name AS name, COALESCE (COUNT(l.id), 0) as linkscount, COALESCE (SUM(l.visitcount), 0 )as visitcount 
+      FROM users u
+      LEFT JOIN links l ON  u.id = l.userid 
+      GROUP BY u.id, name 
+      ORDER BY visitcount DESC
+      LIMIT 10
+      
+     `
     );
     return res.status(200).send(rows);
   } catch (error) {

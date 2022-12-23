@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt"; //bcrypt - biblioteca do javascript para encriptar qualquer tipo de dado
-import  jwt  from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 //import {v4 as uuidV4} from "uuid" // versão 4 é que gera string
 
 import { secret } from "../config/config.js";
@@ -25,30 +25,25 @@ export async function postSignUp(req, res) {
   }
 }
 
-
 export function postSignIn(req, res) {
   const user = res.locals.user;
- 
+
   const dateUser = {
     id: user[0].id,
     name: user[0].name,
     email: user[0].email,
-  }
+  };
 
   //const token = uuidV4()
   //const token = jwt.sign({userId: user.id}, secret, {expiresIn: 60 * 60 * 2} ) // 2 horas p expiração
 
+  const token = jwt.sign(dateUser, secret, { expiresIn: 300 }); // 5 minutos p expiração
 
-  const token = jwt.sign(dateUser, secret, {expiresIn: 300} ) // 5 minutos p expiração
-  
-  res.status(200).send(token)  
-
+  res.status(200).send(token);
 }
-
 
 export async function validateUserExists(email) {
   try {
-    
     const user = await connectionDB.query(
       `
             SELECT * FROM users WHERE email = $1
@@ -62,6 +57,17 @@ export async function validateUserExists(email) {
   }
 }
 
+export async function returnUserById(id) {
+  const queryText = "SELECT * FROM users WHERE id = $1";
+
+  try {
+    const usuario = await connectionDB.query(queryText, [id]);
+    return usuario.rows.pop();
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send({ message: "Erro inesperado no servidor!" });
+  }
+}
 
 /* Informações
 O jwt possui 3 partes. 1) Metadados do jwt 2) payload 3) assinatura digital - ela feita usando payload + secret => é criptografada de fato
